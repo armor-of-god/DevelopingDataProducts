@@ -1,0 +1,45 @@
+---
+title: "Leaflet Project"
+author: "Daniel Veit"
+date: "5/11/2022"
+output: html_document
+---
+
+## **Objective**
+Create a web page using R Markdown that features a map created with Leaflet. 
+Host your webpage on either GitHub Pages, RPubs, or NeoCities.
+Your webpage must contain the date that you created the document, and it must contain a map created with Leaflet. We would love to see you show off your creativity! 
+
+## **Load Required Packages**
+```{r}
+suppressMessages(library(leaflet))
+suppressMessages(library(dplyr))
+```
+
+## **Load the Data**
+Data includes a list of the casualties count in battles in world history. The list includes both sieges (not technically battles but usually yielding similar combat-related deaths) and civilian casualties during the battles.
+```{r}
+sieges <- read.csv("sieges.csv",header=TRUE)
+```
+
+## **Clean Data**
+```{r}
+data <- data.frame(Sieges=sieges$Siege,
+                   Casulties=sieges$Casualties,
+                   Year=sieges$Year,
+                   lat=sieges$lat,
+                   long=sieges$lon)
+```
+
+## **Activating Map**
+```{r, message=FALSE}
+map <- data %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(popup=paste
+             (sieges$Siege,
+              "<br>Year: ",sieges$Year,
+              "<br>Casulties: ",sieges$Casualties))
+map
+```
+
